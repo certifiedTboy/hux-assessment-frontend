@@ -72,7 +72,7 @@ const Signup = () => {
           {error && (
             <ErrorCard
               errorMessage={
-                requestError.error || error || "something went wrong"
+                requestError?.data?.error || error || "something went wrong"
               }
             />
           )}

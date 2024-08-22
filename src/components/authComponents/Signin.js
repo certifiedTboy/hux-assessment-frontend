@@ -46,7 +46,9 @@ const Signin = () => {
           </p>
 
           {error && (
-            <ErrorCard errorMessage={error.error || "something went wrong"} />
+            <ErrorCard
+              errorMessage={error?.data?.error || "something went wrong"}
+            />
           )}
 
           {message && <SuccessCard successMessage={message} />}
