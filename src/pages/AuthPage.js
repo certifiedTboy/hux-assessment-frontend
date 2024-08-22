@@ -1,5 +1,17 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const AuthPage = () => {
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.userState);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/contacts");
+    }
+  }, [user]);
+
   return (
     <section className="container">
       <div className="row">

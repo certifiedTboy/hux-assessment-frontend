@@ -8,13 +8,16 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // select request success message from redux
   const { message } = useSelector((state) => state.requestMessageState);
 
+  // initialize login rtk hook
   const [loginUser, { isSuccess, error, isError, data }] =
     useLoginUserMutation();
 
   const navigate = useNavigate();
 
+  // submit form handler to login user
   const submitFormHandler = async (event) => {
     event.preventDefault();
     if (!email || !password) {

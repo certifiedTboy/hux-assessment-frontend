@@ -9,8 +9,6 @@ if (process.env.NODE_ENV === "development") {
   baseUrl = process.env.REACT_APP_API_PROD_BASE_URL;
 }
 
-console.log(baseUrl);
-
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
@@ -58,7 +56,7 @@ export const userApi = createApi({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setCurrentUser(data));
+          dispatch(setCurrentUser(data.currentUser));
         } catch (error) {}
       },
     }),
@@ -70,4 +68,5 @@ export const {
   useVerifyUserMutation,
   useSetNewPasswordMutation,
   useRequestPasswordResetMutation,
+  useGetCurrentUserMutation,
 } = userApi;

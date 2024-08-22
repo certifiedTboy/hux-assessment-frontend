@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Disclosure,
@@ -9,6 +10,8 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
+import { useGetCurrentUserMutation } from "../lib/apis/userApis";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
@@ -20,9 +23,14 @@ const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");
 };
 
-let user;
-
 const NavBar = () => {
+  const [getCurrentUser, { isSuccess }] = useGetCurrentUserMutation();
+  const { user } = useSelector((state) => state.userState);
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
