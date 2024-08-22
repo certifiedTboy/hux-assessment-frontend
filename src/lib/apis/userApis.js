@@ -9,6 +9,8 @@ if (process.env.NODE_ENV === "development") {
   baseUrl = process.env.REACT_APP_API_PROD_BASE_URL;
 }
 
+console.log(baseUrl);
+
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({

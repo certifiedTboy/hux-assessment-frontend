@@ -1,17 +1,34 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLoginUserMutation } from "../../lib/apis/authApis";
 import classes from "./Auth.module.css";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const submitFormHandler = (event) => {
+  const { message } = useSelector((state) => state.requestMessageState);
+
+  const [loginUser, { isSuccess, error, isError, data }] =
+    useLoginUserMutation();
+
+  const navigate = useNavigate();
+
+  const submitFormHandler = async (event) => {
     event.preventDefault();
-
-    console.log("Form Submitted");
+    if (!email || !password) {
+      return;
+    }
+    await loginUser({ email, password });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/contacts");
+    }
+  }, [isSuccess]);
+
   return (
     <form className="mt-11" onSubmit={submitFormHandler}>
       <div className="space-y-12">
@@ -25,7 +42,13 @@ const Signin = () => {
 
           {error && (
             <div className="alert alert-danger mt-5" role="alert">
-              {error}
+              {error.error || "something went wrong"}
+            </div>
+          )}
+
+          {message && (
+            <div className="alert alert-success mt-5" role="alert">
+              {message}
             </div>
           )}
 

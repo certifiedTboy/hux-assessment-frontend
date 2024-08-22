@@ -1,14 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useVerifyUserMutation } from "../../lib/apis/userApis";
+import { setMessage } from "../../lib/redux/requestMessageSlice";
 
 const VerifyAccount = () => {
   const [token, setToken] = useState("");
-  const [error, setError] = useState("");
 
-  const submitFormHandler = (event) => {
+  // select message from requestMessageState
+  const { message } = useSelector((state) => state.requestMessageState);
+
+  // initialize verify user api hook
+  const [verifyUser, { isSuccess, error }] = useVerifyUserMutation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const submitFormHandler = async (event) => {
     event.preventDefault();
+    if (!token) {
+      return;
+    }
 
-    console.log("Form Submitted");
+    await verifyUser({ token });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(
+        setMessage(
+          "Account verified successfully, login with your valid credentials"
+        )
+      );
+      navigate("/get-started/signin");
+    }
+  }, [isSuccess]);
+
   return (
     <form className="mt-11" onSubmit={submitFormHandler}>
       <div className="space-y-12">
@@ -22,7 +49,13 @@ const VerifyAccount = () => {
 
           {error && (
             <div className="alert alert-danger mt-5" role="alert">
-              {error}
+              {error.error || "something went wrong"}
+            </div>
+          )}
+
+          {message && (
+            <div className="alert alert-success mt-5" role="alert">
+              {message}
             </div>
           )}
 

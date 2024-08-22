@@ -1,6 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useRegisterUserMutation } from "../../lib/apis/userApis";
 import useFormValidation from "../../hooks/userFormValidation";
+import { setMessage } from "../../lib/redux/requestMessageSlice";
 import classes from "./Auth.module.css";
 
 const Signup = () => {
@@ -9,6 +12,12 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // initialize api hook
+  const [
+    registerUser,
+    { isLoading, error: requestError, isError, data, isSuccess },
+  ] = useRegisterUserMutation();
 
   // initialize form validation hook
   const { formIsValid, formError } = useFormValidation(
@@ -22,13 +31,32 @@ const Signup = () => {
   // destructure error and type from formError
   const { type, error } = formError;
 
-  const submitFormHandler = (event) => {
+  // form submit handler
+  const submitFormHandler = async (event) => {
     event.preventDefault();
     if (!formIsValid) {
       return;
     }
-    console.log("Form Submitted");
+
+    // call register user function and pass user data as payload
+    return await registerUser({
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+    });
   };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setMessage(`A mail has been sent to ${data?.user?.email}`));
+      navigate("/get-started/account/verify");
+    }
+  }, [data, isSuccess]);
   return (
     <form className="mt-11" onSubmit={submitFormHandler}>
       <div className="space-y-12">
@@ -112,7 +140,7 @@ const Signup = () => {
                 !formIsValid && "disabled"
               }`}
               type="submit"
-              value="Signup"
+              value={isLoading ? "Please wait..." : "Signup"}
             />
           </div>
 
