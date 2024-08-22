@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import classes from "./Auth.module.css";
+import ErrorCard from "../commons/ErrorCard";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -22,11 +23,7 @@ const ResetPassword = () => {
             Reset password here
           </p>
 
-          {error && (
-            <div className="alert alert-danger mt-5" role="alert">
-              {error}
-            </div>
-          )}
+          {error && <ErrorCard errorMessage={error} />}
 
           <div className="form-group mb-3">
             <input

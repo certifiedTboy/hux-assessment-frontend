@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLoginUserMutation } from "../../lib/apis/authApis";
+import ErrorCard from "../commons/ErrorCard";
+import SuccessCard from "../commons/SuccessCard";
 import classes from "./Auth.module.css";
 
 const Signin = () => {
@@ -44,16 +46,10 @@ const Signin = () => {
           </p>
 
           {error && (
-            <div className="alert alert-danger mt-5" role="alert">
-              {error.error || "something went wrong"}
-            </div>
+            <ErrorCard errorMessage={error.error || "something went wrong"} />
           )}
 
-          {message && (
-            <div className="alert alert-success mt-5" role="alert">
-              {message}
-            </div>
-          )}
+          {message && <SuccessCard successMessage={message} />}
 
           <div className="form-group mb-3">
             <input
@@ -67,7 +63,7 @@ const Signin = () => {
 
           <div className="form-group mb-3">
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               className="form-control"
               onChange={(event) => setPassword(event.target.value)}

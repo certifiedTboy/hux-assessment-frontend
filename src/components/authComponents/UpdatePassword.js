@@ -1,4 +1,6 @@
 import { useState } from "react";
+import SuccessCard from "../commons/SuccessCard";
+import ErrorCard from "../commons/ErrorCard";
 
 const UpdatePassword = () => {
   const [token, setToken] = useState("");
@@ -22,11 +24,7 @@ const UpdatePassword = () => {
             Enter token and password to update password
           </p>
 
-          {error && (
-            <div className="alert alert-danger mt-5" role="alert">
-              {error}
-            </div>
-          )}
+          {error && <ErrorCard errorMessage={error} />}
 
           <div className="form-group mb-3">
             <input
@@ -41,7 +39,7 @@ const UpdatePassword = () => {
           <div className="form-group mb-3">
             <input
               type="text"
-              placeholder="Password"
+              placeholder="password"
               className="form-control"
               onChange={(event) => setPassword(event.target.value)}
               value={password}
@@ -50,7 +48,7 @@ const UpdatePassword = () => {
 
           <div className="form-group mb-3">
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               className="form-control"
               onChange={(event) => setConfirmPassword(event.target.value)}

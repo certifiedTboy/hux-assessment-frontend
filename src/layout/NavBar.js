@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Disclosure,
   DisclosureButton,
@@ -10,26 +11,44 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
 import { useGetCurrentUserMutation } from "../lib/apis/userApis";
-
-const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "About", href: "/about", current: false },
-  { name: "Contacts", href: "/contacts", current: false },
-];
+import { useLogoutUserMutation } from "../lib/apis/authApis";
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");
 };
 
 const NavBar = () => {
-  const [getCurrentUser, { isSuccess }] = useGetCurrentUserMutation();
+  const location = useLocation();
+  const { pathname } = location;
+
+  // navbar options
+  const navigation = [
+    { name: "Home", href: "/", current: pathname === "/" ? true : false },
+    {
+      name: "About",
+      href: "/about",
+      current: pathname === "/about" ? true : false,
+    },
+    {
+      name: "Contacts",
+      href: "/contacts",
+      current: pathname === "/contacts" ? true : false,
+    },
+  ];
+
+  const [getCurrentUser] = useGetCurrentUserMutation();
+  const [logoutUser, { isSuccess: logoutSuccess }] = useLogoutUserMutation();
   const { user } = useSelector((state) => state.userState);
+
+  // logout use handler function
+  const onLogoutUserHander = async () => {
+    logoutUser();
+  };
 
   useEffect(() => {
     getCurrentUser();
-  }, []);
+  }, [logoutSuccess]);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -120,6 +139,7 @@ const NavBar = () => {
                   <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                    onClick={onLogoutUserHander}
                   >
                     Sign out
                   </a>

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useRegisterUserMutation } from "../../lib/apis/userApis";
 import useFormValidation from "../../hooks/userFormValidation";
 import { setMessage } from "../../lib/redux/requestMessageSlice";
+import ErrorCard from "../commons/ErrorCard";
 import classes from "./Auth.module.css";
 
 const Signup = () => {
@@ -69,9 +70,11 @@ const Signup = () => {
           </p>
 
           {error && (
-            <div className="alert alert-danger mt-5" role="alert">
-              {error}
-            </div>
+            <ErrorCard
+              errorMessage={
+                requestError.error || error || "something went wrong"
+              }
+            />
           )}
 
           <div className="form-group mb-3">
@@ -112,7 +115,7 @@ const Signup = () => {
 
           <div className="form-group mb-3">
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               className={`form-control ${
                 type === "password" && classes.input_error_border
@@ -124,7 +127,7 @@ const Signup = () => {
 
           <div className="form-group mb-3">
             <input
-              type="text"
+              type="password"
               placeholder="Confirm Password"
               className={`form-control ${
                 type === "confirmPassword" && classes.input_error_border

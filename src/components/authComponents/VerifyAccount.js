@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ErrorCard from "../commons/ErrorCard";
+import SuccessCard from "../commons/SuccessCard";
 import { useVerifyUserMutation } from "../../lib/apis/userApis";
 import { setMessage } from "../../lib/redux/requestMessageSlice";
 
@@ -48,16 +50,10 @@ const VerifyAccount = () => {
           </p>
 
           {error && (
-            <div className="alert alert-danger mt-5" role="alert">
-              {error.error || "something went wrong"}
-            </div>
+            <ErrorCard errorMessage={error.error || "something went wrong"} />
           )}
 
-          {message && (
-            <div className="alert alert-success mt-5" role="alert">
-              {message}
-            </div>
-          )}
+          {message && <SuccessCard successMessage={message} />}
 
           <div className="form-group mb-3">
             <input
