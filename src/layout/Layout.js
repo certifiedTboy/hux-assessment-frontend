@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
+import { SEO } from "../SEO";
 import AppRoutes from "./AppRoutes";
 import Footer from "./Footer";
 
