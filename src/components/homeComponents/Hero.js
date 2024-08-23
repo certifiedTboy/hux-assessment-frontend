@@ -1,6 +1,6 @@
 const Hero = () => {
   return (
-    <section className="bg-slate-950 dark:bg-gray-900 mb-52 mt-28">
+    <section className="bg-slate-950 dark:bg-gray-900 mb-52 mt-44">
       <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
         <a
           href="#"
